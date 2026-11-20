@@ -1,4 +1,6 @@
-﻿namespace Movies.Models
+﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+
+namespace Movies.Models
 {
     public class Movie
     {
@@ -7,6 +9,7 @@
         public DateOnly ReleaseDate { get; set; }
         public TimeOnly Duration { get; set; }
         public int GenreId { get; set; }
+        [ValidateNever]
         public Genre Genre { get; set; } = null!;
     }
 }

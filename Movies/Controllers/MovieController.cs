@@ -16,7 +16,7 @@ public class MovieController : Controller
     // GET: MOVIES
     public async Task<IActionResult> Index()    
     {
-        return View(await _context.Movie.ToListAsync());
+        return View(await _context.Movie.Include(movie => movie.Genre).ToListAsync());
     }
 
     // GET: MOVIES/Details/5
@@ -28,6 +28,7 @@ public class MovieController : Controller
         }
 
         var movie = await _context.Movie
+            .Include(movie => movie.Genre)
             .FirstOrDefaultAsync(m => m.Id == id);
         if (movie == null)
         {
@@ -38,10 +39,10 @@ public class MovieController : Controller
     }
 
     // GET: MOVIES/Create
-    public async Task<IActionResult> Create()
+    public async Task<IActionResult> Create(int? genreId)
     {
-        await PopulateGenreSelectList();
-        return View();
+        await PopulateGenreSelectList(genreId);
+        return View(new Movie { GenreId = genreId ?? 0 });
     }
 
     // POST: MOVIES/Create

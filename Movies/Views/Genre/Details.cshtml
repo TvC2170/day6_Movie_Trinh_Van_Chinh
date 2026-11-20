@@ -1,0 +1,42 @@
+@model Movies.Models.Genre
+
+@{
+    ViewData["Title"] = Model.Name;
+}
+
+<h1>@Model.Name</h1>
+
+<p>
+    <a asp-controller="Movie" asp-action="Create" asp-route-genreId="@Model.Id" class="btn btn-primary">Create Movie</a>
+</p>
+
+@if (Model.Movies.Count == 0)
+{
+    <p>No movies have been added to this genre yet.</p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Release date</th>
+                <th>Duration</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var movie in Model.Movies)
+            {
+                <tr>
+                    <td>@movie.Title</td>
+                    <td>@movie.ReleaseDate</td>
+                    <td>@movie.Duration</td>
+                    <td><a asp-controller="Movie" asp-action="Details" asp-route-id="@movie.Id">Movie details</a></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+<p><a asp-action="Index">Back to Genres</a></p>
