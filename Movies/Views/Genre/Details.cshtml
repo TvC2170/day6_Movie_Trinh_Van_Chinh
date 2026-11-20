@@ -31,7 +31,7 @@ else
                 <tr>
                     <td>@movie.Title</td>
                     <td>@movie.ReleaseDate</td>
-                    <td>@movie.Duration</td>
+                    <td>@movie.Duration.Hour hours @movie.Duration.Minute minutes</td>
                     <td><a asp-controller="Movie" asp-action="Details" asp-route-id="@movie.Id">Movie details</a></td>
                 </tr>
             }

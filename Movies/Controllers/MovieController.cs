@@ -50,10 +50,12 @@ public class MovieController : Controller
     // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create([Bind("Id,Title,ReleaseDate,Duration,GenreId")] Movie movie)
+    public async Task<IActionResult> Create([Bind("Id,Title,ReleaseDate,DurationHours,DurationMinutes,GenreId")] Movie movie)
     {
+        ValidateDuration(movie);
         if (ModelState.IsValid)
         {
+            movie.Duration = new TimeOnly(movie.DurationHours, movie.DurationMinutes);
             _context.Add(movie);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
@@ -75,6 +77,8 @@ public class MovieController : Controller
         {
             return NotFound();
         }
+        movie.DurationHours = movie.Duration.Hour;
+        movie.DurationMinutes = movie.Duration.Minute;
         await PopulateGenreSelectList(movie.GenreId);
         return View(movie);
     }
@@ -84,15 +88,17 @@ public class MovieController : Controller
     // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Edit(int? id, [Bind("Id,Title,ReleaseDate,Duration,GenreId")] Movie movie)
+    public async Task<IActionResult> Edit(int? id, [Bind("Id,Title,ReleaseDate,DurationHours,DurationMinutes,GenreId")] Movie movie)
     {
         if (id != movie.Id)
         {
             return NotFound();
         }
 
+        ValidateDuration(movie);
         if (ModelState.IsValid)
         {
+            movie.Duration = new TimeOnly(movie.DurationHours, movie.DurationMinutes);
             try
             {
                 _context.Update(movie);
@@ -160,5 +166,13 @@ public class MovieController : Controller
             "Id",
             "Name",
             selectedGenreId);
+    }
+
+    private void ValidateDuration(Movie movie)
+    {
+        if (movie.DurationHours == 0 && movie.DurationMinutes == 0)
+        {
+            ModelState.AddModelError(nameof(movie.DurationMinutes), "Duration must be greater than zero.");
+        }
     }
 }

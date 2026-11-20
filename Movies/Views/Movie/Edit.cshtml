@@ -24,9 +24,15 @@
                 <span asp-validation-for="ReleaseDate" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Duration" class="control-label"></label>
-                <input asp-for="Duration" type="time" class="form-control" />
-                <span asp-validation-for="Duration" class="text-danger"></span>
+                <label asp-for="DurationHours" class="control-label"></label>
+                <input asp-for="DurationHours" type="number" min="0" max="23" class="form-control" />
+                <span asp-validation-for="DurationHours" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="DurationMinutes" class="control-label"></label>
+                <input asp-for="DurationMinutes" type="number" min="0" max="59" class="form-control" />
+                <span asp-validation-for="DurationMinutes" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="GenreId" class="control-label">Genre</label>
